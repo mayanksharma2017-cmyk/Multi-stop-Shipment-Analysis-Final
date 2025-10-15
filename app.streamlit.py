@@ -12,7 +12,13 @@ st.markdown(
 uploaded_file = st.file_uploader("📤 Upload Excel file", type=["xlsx"])
 
 if uploaded_file:
+    try:
+    import openpyxl  # check manually
     df = pd.read_excel(uploaded_file, engine="openpyxl")
+except Exception as e:
+    st.warning("⚠️ openpyxl not available on this environment — trying fallback reader.")
+    df = pd.read_excel(uploaded_file, engine=None)
+
 
     # Normalize column names (lowercase and trim spaces)
     df.columns = [col.strip().lower() for col in df.columns]
